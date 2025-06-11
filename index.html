@@ -5,8 +5,8 @@
     }
   }
   </script>
-<script type="module" crossorigin src="/Flashcard-Gemini/assets/index-C_LMN19v.js"></script>
-<link rel="stylesheet" crossorigin href="/Flashcard-Gemini/assets/index-VZ79Wei_.css">
+<script type="module" crossorigin src="/Flashcard-Gemini/assets/index-i9zZaHqV.js"></script>
+<link rel="stylesheet" crossorigin href="/Flashcard-Gemini/assets/index-7VdjtOYO.css">
 
 
   <!-- Add Google Fonts Link -->
@@ -18,9 +18,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Flashcard Generator</title>
   <link rel="manifest" href="/Flashcard-Gemini/assets/manifest-B6o5GL4D.json">
-  <meta name="theme-color" content="#1a73e8"> <!-- Corresponds to --light-primary -->
+  <meta name="theme-color" id="metaThemeColor" content="#1a73e8"> <!-- Corresponds to --light-primary -->
 
   <div class="container">
+    
+    <div class="theme-switcher">
+      <button id="themeLightButton" data-theme="light" aria-pressed="false">Light</button>
+      <button id="themeDarkButton" data-theme="dark" aria-pressed="false">Dark</button>
+      <button id="themeSystemButton" data-theme="system" aria-pressed="false">System</button>
+    </div>
+
     <h1>Flashcard Generator</h1>
     <p>
       Enter a topic or a list of terms and definitions to generate flashcards.
@@ -29,7 +36,9 @@
       id="topicInput"
       placeholder="Enter topic (e.g., Ancient Rome) or 'Term: Definition' pairs (one per line)"
     ></textarea>
-    <button id="generateButton">Generate Flashcards</button>
+    <button id="generateButton">Generate</button>
+
+
     <div id="errorMessage" class="error-message"></div>
     <div id="flashcardsContainer" class="flashcards-container">
       <!-- Flashcards will be generated here -->
