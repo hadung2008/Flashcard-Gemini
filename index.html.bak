@@ -16,16 +16,9 @@
   <title>Flashcard Generator</title>
   <link rel="stylesheet" href="index.css">
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" id="metaThemeColor" content="#1a73e8"> <!-- Corresponds to --light-primary -->
+  <meta name="theme-color" content="#1a73e8"> <!-- Corresponds to --light-primary -->
 
   <div class="container">
-    
-    <div class="theme-switcher">
-      <button id="themeLightButton" data-theme="light" aria-pressed="false">Light</button>
-      <button id="themeDarkButton" data-theme="dark" aria-pressed="false">Dark</button>
-      <button id="themeSystemButton" data-theme="system" aria-pressed="false">System</button>
-    </div>
-
     <h1>Flashcard Generator</h1>
     <p>
       Enter a topic or a list of terms and definitions to generate flashcards.
@@ -34,13 +27,12 @@
       id="topicInput"
       placeholder="Enter topic (e.g., Ancient Rome) or 'Term: Definition' pairs (one per line)"
     ></textarea>
-    <button id="generateButton">Generate</button>
-
-
+    <button id="generateButton">Generate Flashcards</button>
     <div id="errorMessage" class="error-message"></div>
     <div id="flashcardsContainer" class="flashcards-container">
       <!-- Flashcards will be generated here -->
     </div>
   </div>
-  <script type="module" src="index.tsx"></script><link rel="stylesheet" href="/index.css">
+  <script type="module" src="index.tsx"></script>
+<link rel="stylesheet" href="/index.css">
 <script type="module" src="/index.tsx"></script>

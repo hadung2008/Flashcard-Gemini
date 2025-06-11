@@ -1,133 +1,244 @@
+
 :root {
-  --light-bg: #f8f9fa; /* Lighter grey for light mode */
-  --dark-bg: #202124;  /* Google dark grey */
+  /* Core Light Theme Colors */
+  --light-bg: #f8f9fa;
   --light-surface: #ffffff;
-  --dark-surface: #2d2e30; /* Slightly lighter dark surface */
   --light-text-primary: #202124;
-  --dark-text-primary: #e8eaed; /* Google dark mode text */
   --light-text-secondary: #5f6368;
-  --dark-text-secondary: #bdc1c6; /* Google dark mode secondary text */
-  --light-primary: #1a73e8; /* Google Blue */
-  --dark-primary: #8ab4f8; /* Lighter Google Blue for dark mode */
+  --light-primary: #1a73e8;
   --light-primary-hover: #185abc;
-  --dark-primary-hover: #aecbfa;
   --light-border: #dadce0;
-  --dark-border: #5f6368;
   --light-error: #d93025;
-  --dark-error: #f28b82;
-  --light-card-bg: #e8f0fe; /* Light blue background for cards */
-  --dark-card-bg: #3c4043; /* Darker grey for cards */
+  --light-card-bg: #e8f0fe;
   --light-disabled-bg: #e0e0e0;
-  --dark-disabled-bg: #3c4043;
   --light-disabled-text: #a0a0a0;
-  --dark-disabled-text: #7f8184;
   --light-shadow-color-1: rgba(60, 64, 67, 0.15);
-  --dark-shadow-color-1: rgba(0, 0, 0, 0.3);
   --light-shadow-color-2: rgba(60, 64, 67, 0.1);
-  --dark-shadow-color-2: rgba(0, 0, 0, 0.2);
-   --light-focus-shadow-color: rgba(26, 115, 232, 0.2);
-  --dark-focus-shadow-color: rgba(138, 180, 248, 0.3);
+  --light-focus-shadow-color: rgba(26, 115, 232, 0.2);
   --light-button-focus-shadow-color: rgba(26, 115, 232, 0.3);
-  --dark-button-focus-shadow-color: rgba(138, 180, 248, 0.4);
   --light-button-text: white;
-  --dark-button-text: var(--dark-bg); /* Use dark background for text on light blue */
+  --light-speak-button-text: #5f6368;
+  --light-speak-button-hover-text: #1a73e8;
+
+
+  /* Core Dark Theme Colors */
+  --dark-bg: #202124;
+  --dark-surface: #2d2e30;
+  --dark-text-primary: #e8eaed;
+  --dark-text-secondary: #bdc1c6;
+  --dark-primary: #8ab4f8;
+  --dark-primary-hover: #aecbfa;
+  --dark-border: #5f6368;
+  --dark-error: #f28b82;
+  --dark-card-bg: #3c4043;
+  --dark-disabled-bg: #3c4043;
+  --dark-disabled-text: #7f8184;
+  --dark-shadow-color-1: rgba(0, 0, 0, 0.3);
+  --dark-shadow-color-2: rgba(0, 0, 0, 0.2);
+  --dark-focus-shadow-color: rgba(138, 180, 248, 0.3);
+  --dark-button-focus-shadow-color: rgba(138, 180, 248, 0.4);
+  --dark-button-text: var(--dark-bg);
+  --dark-speak-button-text: #bdc1c6;
+  --dark-speak-button-hover-text: #8ab4f8;
+
+  /* Flashcard Dimensions */
   --flashcard-width: 220px;
-  --flashcard-height: 150px; /* This will now act as min-height for the card */
+  --flashcard-height: 150px;
+
+  /* Effective theme variables - System is default */
+  --effective-bg: light-dark(var(--light-bg), var(--dark-bg));
+  --effective-surface: light-dark(var(--light-surface), var(--dark-surface));
+  --effective-text-primary: light-dark(var(--light-text-primary), var(--dark-text-primary));
+  --effective-text-secondary: light-dark(var(--light-text-secondary), var(--dark-text-secondary));
+  --effective-primary: light-dark(var(--light-primary), var(--dark-primary));
+  --effective-primary-hover: light-dark(var(--light-primary-hover), var(--dark-primary-hover));
+  --effective-border: light-dark(var(--light-border), var(--dark-border));
+  --effective-error: light-dark(var(--light-error), var(--dark-error));
+  --effective-card-bg: light-dark(var(--light-card-bg), var(--dark-card-bg));
+  --effective-textarea-bg: light-dark(var(--light-bg), var(--dark-card-bg)); /* Special case for textarea */
+  --effective-disabled-bg: light-dark(var(--light-disabled-bg), var(--dark-disabled-bg));
+  --effective-disabled-text: light-dark(var(--light-disabled-text), var(--dark-disabled-text));
+  --effective-shadow-color-1: light-dark(var(--light-shadow-color-1), var(--dark-shadow-color-1));
+  --effective-shadow-color-2: light-dark(var(--light-shadow-color-2), var(--dark-shadow-color-2));
+  --effective-focus-shadow-color: light-dark(var(--light-focus-shadow-color), var(--dark-focus-shadow-color));
+  --effective-button-focus-shadow-color: light-dark(var(--light-button-focus-shadow-color), var(--dark-button-focus-shadow-color));
+  --effective-button-text: light-dark(var(--light-button-text), var(--dark-button-text));
+  --effective-speak-button-text: light-dark(var(--light-speak-button-text), var(--dark-speak-button-text));
+  --effective-speak-button-hover-text: light-dark(var(--light-speak-button-hover-text), var(--dark-speak-button-hover-text));
 }
+
+html[data-theme="light"] {
+  --effective-bg: var(--light-bg);
+  --effective-surface: var(--light-surface);
+  --effective-text-primary: var(--light-text-primary);
+  --effective-text-secondary: var(--light-text-secondary);
+  --effective-primary: var(--light-primary);
+  --effective-primary-hover: var(--light-primary-hover);
+  --effective-border: var(--light-border);
+  --effective-error: var(--light-error);
+  --effective-card-bg: var(--light-card-bg);
+  --effective-textarea-bg: var(--light-bg);
+  --effective-disabled-bg: var(--light-disabled-bg);
+  --effective-disabled-text: var(--light-disabled-text);
+  --effective-shadow-color-1: var(--light-shadow-color-1);
+  --effective-shadow-color-2: var(--light-shadow-color-2);
+  --effective-focus-shadow-color: var(--light-focus-shadow-color);
+  --effective-button-focus-shadow-color: var(--light-button-focus-shadow-color);
+  --effective-button-text: var(--light-button-text);
+  --effective-speak-button-text: var(--light-speak-button-text);
+  --effective-speak-button-hover-text: var(--light-speak-button-hover-text);
+}
+
+html[data-theme="dark"] {
+  --effective-bg: var(--dark-bg);
+  --effective-surface: var(--dark-surface);
+  --effective-text-primary: var(--dark-text-primary);
+  --effective-text-secondary: var(--dark-text-secondary);
+  --effective-primary: var(--dark-primary);
+  --effective-primary-hover: var(--dark-primary-hover);
+  --effective-border: var(--dark-border);
+  --effective-error: var(--dark-error);
+  --effective-card-bg: var(--dark-card-bg);
+  --effective-textarea-bg: var(--dark-card-bg);
+  --effective-disabled-bg: var(--dark-disabled-bg);
+  --effective-disabled-text: var(--dark-disabled-text);
+  --effective-shadow-color-1: var(--dark-shadow-color-1);
+  --effective-shadow-color-2: var(--dark-shadow-color-2);
+  --effective-focus-shadow-color: var(--dark-focus-shadow-color);
+  --effective-button-focus-shadow-color: var(--dark-button-focus-shadow-color);
+  --effective-button-text: var(--dark-button-text);
+  --effective-speak-button-text: var(--dark-speak-button-text);
+  --effective-speak-button-hover-text: var(--dark-speak-button-hover-text);
+}
+
 
 body {
   font-family: 'Google Sans', Roboto, Arial, sans-serif;
   margin: 0;
-  background-color: light-dark(var(--light-bg), var(--dark-bg));
-  color: light-dark(var(--light-text-primary), var(--dark-text-primary));
+  background-color: var(--effective-bg);
+  color: var(--effective-text-primary);
   display: flex;
   justify-content: center;
   align-items: flex-start;
   min-height: 100vh;
   padding: 20px;
   box-sizing: border-box;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .container {
-  background-color: light-dark(var(--light-surface), var(--dark-surface));
+  background-color: var(--effective-surface);
   padding: 40px;
   border-radius: 12px;
-  box-shadow: 0 1px 3px light-dark(var(--light-shadow-color-1), var(--dark-shadow-color-1)),
-              0 4px 8px light-dark(var(--light-shadow-color-2), var(--dark-shadow-color-2));
+  box-shadow: 0 1px 3px var(--effective-shadow-color-1),
+              0 4px 8px var(--effective-shadow-color-2);
   width: 90%;
   max-width: 800px;
   text-align: center;
   margin-top: 20px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 h1 {
-  color: light-dark(var(--light-primary), var(--dark-primary));
+  color: var(--effective-primary);
   margin-bottom: 15px;
   font-size: 2em;
   font-weight: 500;
+  transition: color 0.3s ease;
 }
 
 p {
   margin-bottom: 25px;
-  color: light-dark(var(--light-text-secondary), var(--dark-text-secondary));
+  color: var(--effective-text-secondary);
   line-height: 1.6;
+  transition: color 0.3s ease;
 }
 
 textarea {
   width: calc(100% - 22px);
   padding: 15px;
   margin-bottom: 25px;
-  border: 1px solid light-dark(var(--light-border), var(--dark-border));
+  border: 1px solid var(--effective-border);
   border-radius: 8px;
   font-size: 16px;
   min-height: 120px;
-  background-color: light-dark(var(--light-bg), var(--dark-card-bg)); /* Use darker card bg for dark text area */
-  color: light-dark(var(--light-text-primary), var(--dark-text-primary));
+  background-color: var(--effective-textarea-bg);
+  color: var(--effective-text-primary);
   resize: vertical;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
 }
 
 textarea:focus {
   outline: none;
-  border-color: light-dark(var(--light-primary), var(--dark-primary));
-  box-shadow: 0 0 0 2px light-dark(var(--light-focus-shadow-color), var(--dark-focus-shadow-color));
+  border-color: var(--effective-primary);
+  box-shadow: 0 0 0 2px var(--effective-focus-shadow-color);
 }
 
 button {
-  background-color: light-dark(var(--light-primary), var(--dark-primary));
-  color: light-dark(var(--light-button-text), var(--dark-button-text));
+  background-color: var(--effective-primary);
+  color: var(--effective-button-text);
   padding: 14px 24px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
   font-weight: 500;
-  transition: background-color 0.3s ease, box-shadow 0.2s ease;
-  box-shadow: 0 1px 2px light-dark(var(--light-shadow-color-2), var(--dark-shadow-color-2));
+  transition: background-color 0.3s ease, box-shadow 0.2s ease, color 0.3s ease;
+  box-shadow: 0 1px 2px var(--effective-shadow-color-2);
 }
 
 button:hover {
-  background-color: light-dark(var(--light-primary-hover), var(--dark-primary-hover));
-  box-shadow: 0 1px 3px light-dark(var(--light-shadow-color-1), var(--dark-shadow-color-1));
+  background-color: var(--effective-primary-hover);
+  box-shadow: 0 1px 3px var(--effective-shadow-color-1);
 }
 
 button:focus {
   outline: none;
-  box-shadow: 0 0 0 3px light-dark(var(--light-button-focus-shadow-color), var(--dark-button-focus-shadow-color));
+  box-shadow: 0 0 0 3px var(--effective-button-focus-shadow-color);
 }
 
 button:disabled {
-  background-color: light-dark(var(--light-disabled-bg), var(--dark-disabled-bg));
-  color: light-dark(var(--light-disabled-text), var(--dark-disabled-text));
+  background-color: var(--effective-disabled-bg);
+  color: var(--effective-disabled-text);
   cursor: not-allowed;
   box-shadow: none;
 }
 
+.theme-switcher {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.theme-switcher button {
+  padding: 8px 16px;
+  font-size: 14px;
+  background-color: var(--effective-surface);
+  color: var(--effective-text-secondary);
+  border: 1px solid var(--effective-border);
+}
+
+.theme-switcher button:hover {
+  background-color: var(--effective-card-bg); /* Use card-bg for subtle hover */
+  color: var(--effective-text-primary);
+}
+
+.theme-switcher button[aria-pressed="true"] {
+  background-color: var(--effective-primary);
+  color: var(--effective-button-text);
+  border-color: var(--effective-primary);
+  font-weight: bold;
+}
+
+
 .error-message {
-  color: light-dark(var(--light-error), var(--dark-error));
+  color: var(--effective-error);
   margin-top: 20px;
   font-weight: 500;
   min-height: 1.5em;
+  transition: color 0.3s ease;
 }
 
 .flashcards-container {
@@ -142,25 +253,22 @@ button:disabled {
 .flashcard {
   background-color: transparent; /* Make the outer container transparent */
   width: var(--flashcard-width);
-  /* height: var(--flashcard-height); Removed fixed height */
   min-height: var(--flashcard-height); /* Added min-height */
   border: none; /* Remove border from outer container */
   border-radius: 10px;
   cursor: pointer;
-  perspective: 1000px; /* Add perspective for 3D effect */
-  box-shadow: none; /* Remove shadow from outer container */
+  perspective: 1000px;
+  box-shadow: none;
 }
 
 .flashcard-inner {
-  /* position: relative; Changed to display: grid */
-  display: grid; /* Added for auto-height based on content */
+  display: grid;
   width: 100%;
-  /* height: 100%; Removed, height will be auto from grid content */
   text-align: center;
   transition: transform 0.6s;
   transform-style: preserve-3d;
-  box-shadow: 0 1px 2px light-dark(var(--light-shadow-color-2), var(--dark-shadow-color-2)); /* Apply shadow here */
-  border-radius: 10px; /* Apply border-radius here */
+  box-shadow: 0 1px 2px var(--effective-shadow-color-2);
+  border-radius: 10px;
 }
 
 .flashcard.flipped .flashcard-inner {
@@ -169,21 +277,20 @@ button:disabled {
 
 .flashcard-front,
 .flashcard-back {
-  /* position: absolute; Removed, grid handles layout */
-  grid-area: 1 / 1; /* Both front and back occupy the same grid cell */
+  grid-area: 1 / 1;
   width: 100%;
-  /* height: 100%; Removed, height is auto based on content */
   -webkit-backface-visibility: hidden; /* Safari */
   backface-visibility: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Vertically centers content if card is taller */
+  justify-content: center;
   align-items: center;
-  padding: 20px; 
+  padding: 20px;
   box-sizing: border-box;
-  border-radius: 10px; /* Match parent */
-  border: 1px solid light-dark(var(--light-border), var(--dark-border)); /* Apply border here */
-  background-color: light-dark(var(--light-card-bg), var(--dark-card-bg)); /* Apply background here */
+  border-radius: 10px;
+  border: 1px solid var(--effective-border);
+  background-color: var(--effective-card-bg);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .flashcard-back {
@@ -191,30 +298,32 @@ button:disabled {
 }
 
 .flashcard:hover .flashcard-inner {
-  box-shadow: 0 4px 8px light-dark(var(--light-shadow-color-1), var(--dark-shadow-color-1));
+  box-shadow: 0 4px 8px var(--effective-shadow-color-1);
 }
 
 .flashcard:hover .flashcard-front,
 .flashcard:hover .flashcard-back {
-   border-color: light-dark(var(--light-primary), var(--dark-primary));
+   border-color: var(--effective-primary);
 }
 
 .term {
-  font-size: 1.3em; /* Adjust size */
+  font-size: 1.3em;
   font-weight: 500;
-  color: light-dark(var(--light-text-primary), var(--dark-text-primary));
-  margin-bottom: 10px; /* Add some space if speak button is below */
-  word-wrap: break-word; /* Ensure long terms wrap */
-  overflow-wrap: break-word; /* Ensure long terms wrap */
+  color: var(--effective-text-primary);
+  margin-bottom: 10px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  transition: color 0.3s ease;
 }
 
 .definition {
-  font-size: 1.0em; /* Adjust size */
-  color: light-dark(var(--light-text-secondary), var(--dark-text-secondary));
-  line-height: 1.4; /* Adjust line height */
-  margin-bottom: 10px; /* Add some space if speak button is below */
-  word-wrap: break-word; /* Ensure long definitions wrap */
-  overflow-wrap: break-word; /* Ensure long definitions wrap */
+  font-size: 1.0em;
+  color: var(--effective-text-secondary);
+  line-height: 1.4;
+  margin-bottom: 10px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  transition: color 0.3s ease;
 }
 
 .speak-button {
@@ -223,37 +332,28 @@ button:disabled {
   right: 8px;
   background-color: transparent;
   border: none;
-  color: light-dark(var(--light-text-secondary), var(--dark-text-secondary));
-  font-size: 1.5em; /* Make icon larger */
+  color: var(--effective-speak-button-text);
+  font-size: 1.5em;
   padding: 5px;
   border-radius: 50%;
   cursor: pointer;
-  line-height: 1; /* Ensure icon is vertically centered if it has descenders/ascenders */
+  line-height: 1;
   transition: color 0.2s ease, transform 0.2s ease;
-  z-index: 5; /* Ensure it's above other text if overlap occurs */
+  z-index: 5;
 }
 
 .speak-button:hover,
 .speak-button:focus {
-  color: light-dark(var(--light-primary), var(--dark-primary));
+  color: var(--effective-speak-button-hover-text);
   transform: scale(1.1);
-  outline: none; /* Custom focus or rely on browser default if sufficient */
+  outline: none;
 }
-
-/* Optional: if you want a subtle background on hover/focus */
-/*
-.speak-button:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-}
-[data-theme="dark"] .speak-button:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-*/
 
 footer {
   margin-top: 50px;
   padding-top: 25px;
-  border-top: 1px solid light-dark(var(--light-border), var(--dark-border));
-  color: light-dark(var(--light-text-secondary), var(--dark-text-secondary));
+  border-top: 1px solid var(--effective-border);
+  color: var(--effective-text-secondary);
   font-size: 0.9em;
+  transition: border-color 0.3s ease, color 0.3s ease;
 }
