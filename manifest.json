@@ -1,0 +1,24 @@
+
+{
+  "name": "Flashcard Maker",
+  "short_name": "Flashcards",
+  "description": "Instantly create interactive flashcards for any topic with the power of Gemini! Learn smarter, not harder.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f8f9fa",
+  "theme_color": "#1a73e8",
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

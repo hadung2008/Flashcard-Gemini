@@ -1,0 +1,205 @@
+
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+*/
+import {GoogleGenAI} from '@google/genai';
+
+interface Flashcard {
+  term: string;
+  termLang: string;
+  definition: string;
+  definitionLang: string;
+}
+
+// Service Worker Registration
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(registration => {
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+      })
+      .catch(error => {
+        console.log('ServiceWorker registration failed: ', error);
+      });
+  });
+}
+
+const topicInput = document.getElementById('topicInput') as HTMLTextAreaElement;
+const generateButton = document.getElementById(
+  'generateButton',
+) as HTMLButtonElement;
+const flashcardsContainer = document.getElementById(
+  'flashcardsContainer',
+) as HTMLDivElement;
+const errorMessage = document.getElementById('errorMessage') as HTMLDivElement;
+
+const ai = new GoogleGenAI({apiKey: process.env.API_KEY});
+
+function speakText(text: string, lang: string = navigator.language || 'en-US') {
+  if (speechSynthesis.speaking) {
+    speechSynthesis.cancel(); // Stop any ongoing speech
+  }
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = lang; // Set language for the utterance
+  speechSynthesis.speak(utterance);
+}
+
+generateButton.addEventListener('click', async () => {
+  const topic = topicInput.value.trim();
+  if (!topic) {
+    errorMessage.textContent =
+      'Please enter a topic or some terms and definitions.';
+    flashcardsContainer.textContent = '';
+    return;
+  }
+
+  errorMessage.textContent = 'Generating flashcards...';
+  flashcardsContainer.textContent = '';
+  generateButton.disabled = true;
+
+  try {
+    const prompt = `You are a flashcard generation assistant. For the given input, generate flashcards.
+Each flashcard MUST consist of a term, its ISO 639-1 language code, a definition, and its ISO 639-1 language code.
+The output format for EACH flashcard MUST be EXACTLY:
+"Term_Text (lang_code_for_term): Definition_Text (lang_code_for_definition)"
+Each flashcard pair must be on a new line.
+Use "en" for English, "es" for Spanish, "fr" for French, "de" for German, "ja" for Japanese, "ko" for Korean, "zh" for Chinese, etc.
+If the input is a topic, generate relevant flashcards.
+If the input itself is a list of term/definition pairs, process them into the required format with language codes.
+
+Examples of EXPECTED OUTPUT format:
+Hello (en): Hola (es)
+Apple (en): Pomme (fr)
+Water (en): Wasser (de)
+ありがとう (ja): Thank you (en)
+사랑해 (ko): I love you (en)
+
+User input: "${topic}"
+
+Generate the flashcards based on the user input above, following all formatting instructions.`;
+
+    const result = await ai.models.generateContent({
+      model: 'gemini-2.5-flash-preview-04-17',
+      contents: prompt,
+    });
+    const responseText = result?.text ?? '';
+
+    if (responseText) {
+      const flashcards: Flashcard[] = responseText
+        .split('\n')
+        .map((line) => {
+          line = line.trim();
+          if (!line) return null;
+
+          const parts = line.split(':');
+          if (parts.length < 2) {
+            console.warn(`Line does not contain ':' separator: "${line}". Skipping.`);
+            return null;
+          }
+
+          const termPartStr = parts[0].trim();
+          const defPartStr = parts.slice(1).join(':').trim();
+
+          const langCodeRegex = /^(.*?)\s*\(([a-zA-Z]{2}(?:-[a-zA-Z0-9]{2,})?)\)$/;
+
+          const termMatch = termPartStr.match(langCodeRegex);
+          const defMatch = defPartStr.match(langCodeRegex);
+
+          if (termMatch && termMatch[1] && termMatch[2] && defMatch && defMatch[1] && defMatch[2]) {
+            const term = termMatch[1].trim();
+            const termLang = termMatch[2];
+            const definition = defMatch[1].trim();
+            const definitionLang = defMatch[2];
+
+            if (term && definition) {
+              return { term, termLang, definition, definitionLang };
+            }
+          }
+          console.warn(`Could not parse line into term (lang) and definition (lang): "${line}". Skipping.`);
+          return null;
+        })
+        .filter((card): card is Flashcard => card !== null);
+
+      if (flashcards.length > 0) {
+        errorMessage.textContent = '';
+        flashcards.forEach((flashcard, index) => {
+          const cardDiv = document.createElement('div');
+          cardDiv.classList.add('flashcard');
+          cardDiv.dataset['index'] = index.toString();
+          cardDiv.setAttribute('aria-roledescription', 'flashcard');
+
+          const cardInner = document.createElement('div');
+          cardInner.classList.add('flashcard-inner');
+
+          const cardFront = document.createElement('div');
+          cardFront.classList.add('flashcard-front');
+          cardFront.setAttribute('aria-label', `Term: ${flashcard.term}`);
+
+          const termDiv = document.createElement('div');
+          termDiv.classList.add('term');
+          termDiv.textContent = flashcard.term;
+
+          const speakButtonFront = document.createElement('button');
+          speakButtonFront.classList.add('speak-button');
+          speakButtonFront.textContent = '🔊';
+          speakButtonFront.setAttribute('aria-label', `Read term: ${flashcard.term}`);
+          speakButtonFront.addEventListener('click', (e) => {
+            e.stopPropagation();
+            speakText(flashcard.term, flashcard.termLang);
+          });
+
+          const cardBack = document.createElement('div');
+          cardBack.classList.add('flashcard-back');
+          cardBack.setAttribute('aria-label', `Definition: ${flashcard.definition}`);
+
+          const definitionDiv = document.createElement('div');
+          definitionDiv.classList.add('definition');
+          definitionDiv.textContent = flashcard.definition;
+
+          const speakButtonBack = document.createElement('button');
+          speakButtonBack.classList.add('speak-button');
+          speakButtonBack.textContent = '🔊';
+          speakButtonBack.setAttribute('aria-label', `Read definition: ${flashcard.definition}`);
+          speakButtonBack.addEventListener('click', (e) => {
+            e.stopPropagation();
+            speakText(flashcard.definition, flashcard.definitionLang);
+          });
+
+          cardFront.appendChild(termDiv);
+          cardFront.appendChild(speakButtonFront);
+          cardBack.appendChild(definitionDiv);
+          cardBack.appendChild(speakButtonBack);
+          cardInner.appendChild(cardFront);
+          cardInner.appendChild(cardBack);
+          cardDiv.appendChild(cardInner);
+
+          flashcardsContainer.appendChild(cardDiv);
+
+          cardDiv.addEventListener('click', () => {
+            cardDiv.classList.toggle('flipped');
+            if (cardDiv.classList.contains('flipped')) {
+                speakButtonBack.focus();
+            } else {
+                speakButtonFront.focus();
+            }
+          });
+        });
+      } else {
+        errorMessage.textContent =
+          'No valid flashcards could be generated from the response. Please check the format or try a different topic.';
+      }
+    } else {
+      errorMessage.textContent =
+        'Failed to generate flashcards or received an empty response. Please try again.';
+    }
+  } catch (error: unknown) {
+    console.error('Error generating content:', error);
+    const detailedError =
+      (error as Error)?.message || 'An unknown error occurred';
+    errorMessage.textContent = `An error occurred: ${detailedError}`;
+    flashcardsContainer.textContent = '';
+  } finally {
+    generateButton.disabled = false;
+  }
+});
